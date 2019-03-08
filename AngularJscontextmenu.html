@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+        .box {
+            margin-top: 2%;
+            height: 60px;
+            width: 30%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: justify;
+            background-color: #e1e2e2;
+            border: 1px solid #e1e2e2;
+            padding-left: 20px;
+            padding-right: 10px;
+            z-index: -1;
+        }
+
+        .hidemenu {
+            border: 1px solid white;
+            background-color: white;
+            box-shadow: 0px 5px 20px #555;
+            width: 280px;
+            height: auto;
+            margin-left: 250px;
+            visibility: hidden;
+        }
+
+        .showmenu {
+            position:absolute;
+            background-color: white;
+            box-shadow: 0px 5px 20px #555;
+            width: 280px;
+            height: auto;
+            margin-left: 250px;
+            visibility: visible;
+            z-index: 0;
+        }
+        li{
+            padding:10px;
+        }
+    </style>
+
+</head> 
+<body ng-app="myapp">
+    
+    <div ng-controller="TestController">
+        <div ng-repeat="x in users">
+            <div class="box"  >
+                <div style="float:left">
+                    <h5>
+                        {{x.Name}}
+                    </h5>
+                </div>
+                <div class="usd"  ng-click="selectUser(x.type,x.Id )"  style="float:right;margin-top:15px;">                   
+                        <i class="fa fa-bars" style="font-size:24px" ></i>            
+                </div>
+                <div id="{{x.Id}}" class="hidemenu"    >
+                    <ul style="list-style:none; margin-left:-12px; " >
+                        <li><i class="fa fa-eye" style="font-size:24px;color:#2F9688;"></i>&nbsp&nbsp View feedback link</li>
+                        <li><i class="fa fa-file-archive-o" style="font-size:24px;color:#2F9688;"></i>&nbsp&nbsp Set service code link</li>
+                        <li ng-hide="isuser"><i class="fa fa-user" style="font-size:24px;color:#2F9688;"></i>&nbsp&nbsp Toggle user role</li>
+                        <li ng-hide="isuser"><i class="fa fa-trash-o" style="font-size:24px;color:#2F9688;"></i>&nbsp&nbsp Delete user</li>
+                    </ul>
+                </div>               
+            </div>
+        </div>
+    </div>
+
+
+   
+    <script>
+
+      
+        var app = angular.module("myapp", []);      
+
+        app.controller("TestController", function ($scope) {
+
+            $scope.constants = ["owner", "admin", "user"];
+            $scope.users = [{ "Id": "1", "orgId": "333", "Name": "thanga", "type": "owner" },
+            { "Id": "2", "orgId": "334", "Name": "ravi", "type": "owner" },
+            { "Id": "3", "orgId": "335", "Name": "kumar", "type": "user" },
+            { "Id": "4", "orgId": "336", "Name": "anbu", "type": "user" }
+            ];
+            $scope.menu = ["View", "Set", "Toggle", "Delete"];
+            $scope.isuser = true;
+            $scope.menuShow = false;
+            $scope.userIdshow;
+
+
+            $scope.selectUser = function (type, userId) {
+
+                if ($scope.userIdshow == userId) {
+                    $("#" + $scope.userIdshow).removeClass("showmenu");
+                    $("#" + $scope.userIdshow).addClass("hidemenu");
+                    $scope.menuShow = false;
+                    $scope.userIdshow = "";
+                    return;
+                }
+                if ($scope.menuShow == true) {
+                    $("#" + $scope.userIdshow).removeClass("showmenu");
+                    $("#" + $scope.userIdshow).addClass("hidemenu");
+                    $scope.menuShow = false;
+                    $scope.userIdshow = "";
+                } else {
+                    console.log("what is status " + $scope.menuShow);
+                }
+
+
+                if (type == $scope.constants[0]) {
+                    console.log("type is  second" + type + " userid is " + userId);
+                    $scope.isuser = true;
+                    $scope.menuShow = true;
+                    $scope.userIdshow = userId;
+                    var elmClass = $("#" + userId).attr('class');
+                    if (elmClass == "hidemenu") {
+                        $("#" + userId).removeClass("hidemenu");
+                        $("#" + userId).addClass("showmenu");
+                    } else if (elmClass == "showmenu") {
+                        $("#" + userId).removeClass("showmenu");
+                        $("#" + userId).addClass("hidemenu");
+                    }
+                   
+                } else if (type == $scope.constants[2]) {
+                    console.log("not assigned");
+                    $scope.isuser = false;
+                    $scope.menuShow = true;
+                    $scope.userIdshow = userId;
+                    console.log("type is  second" + type + " userid is " + userId);
+                    var elmClass = $("#" + userId).attr('class');
+                    if (elmClass == "hidemenu") {
+                        $("#" + userId).removeClass("hidemenu");
+                        $("#" + userId).addClass("showmenu");
+                    } else if (elmClass == "showmenu") {
+                        $("#" + userId).removeClass("showmenu");
+                        $("#" + userId).addClass("hidemenu");
+                    }
+                }
+
+            }
+
+        });                   
+
+      
+             
+    </script>
+
+
+</body>
+</html>
